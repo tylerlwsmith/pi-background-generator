@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  background-generator:
+    container_name: ${CONTAINER_NAME:-background-generator}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./background-generator:/srv/app

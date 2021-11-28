@@ -1,0 +1,24 @@
+#! /bin/bash
+
+# Exit if any command fails.
+set -e
+
+# Load necessary environment variables to set the LXDE background image.
+export DISPLAY=:0.0
+export XDG_RUNTIME_DIR=/run/user/$UID
+
+# Include user's local binaries so docker-compose will work.
+PATH="$HOME/.local/bin:$PATH"
+
+# Set script variables.
+PROJECT_DIRECTORY=$(cd $(dirname $0)/.. && pwd)
+IMAGE=${PROJECT_DIRECTORY}/background-generator/generated-images/background.png
+
+# Generate the image.
+echo "Starting background generation at $(date +"%F %T")"
+docker-compose -f ${PROJECT_DIRECTORY}/docker-compose.yml \
+    run --rm -e TZ=$(cat /etc/timezone) background-generator
+
+# Set the generated image as the background.   
+pcmanfm --set-wallpaper=${IMAGE}
+echo -e "New background set at $(date +"%F %T")\n"

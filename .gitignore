@@ -1,0 +1,13 @@
+/background-generator/node_modules/
+
+/background-generator/generated-images/*
+!/background-generator/generated-images/.keep
+
+/background-generator/events/*
+!/background-generator/events/events.example.js
+
+/logs/*
+!/logs/.keep
+
+.vscode
+.env

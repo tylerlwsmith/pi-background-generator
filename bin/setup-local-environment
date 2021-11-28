@@ -1,0 +1,45 @@
+#! /bin/bash
+
+# Exit if any command fails.
+set -e
+
+# Exit on Control + C.
+trap exit 1 SIGINT
+
+# Set script variables.
+PROJECT_DIRECTORY=$(cd $(dirname $0)/.. && pwd)
+EVENTS_PATH=${PROJECT_DIRECTORY}/background-generator/events
+NODE_MODULES_PATH=${PROJECT_DIRECTORY}/background-generator/node_modules
+CRON_TASK="${PROJECT_DIRECTORY}/bin/run >> ${PROJECT_DIRECTORY}/logs/cron.log 2>&1"
+
+echo "Building the image"
+docker-compose -f ${PROJECT_DIRECTORY}/docker-compose.yml build
+
+echo "Creating a container from the built image with no volumes mounted"
+docker-compose -f ${PROJECT_DIRECTORY}/docker-compose.no-mount.yml up --no-start
+
+echo "Checking for existing node_modules folder"
+if [ -d $NODE_MODULES_PATH ]
+then
+    echo "Deleting current node_modules folder"
+    rm -rf $NODE_MODULES_PATH
+fi
+
+echo "Copying node_modules from the container to the host machine"
+docker cp background-generator:srv/app/node_modules $NODE_MODULES_PATH
+
+echo "Checking to see if events file exists"
+if [ ! -f $EVENTS_PATH/events.js ]
+then
+    echo "Copying events file from events.example.js"
+    cp $EVENTS_PATH/events.example.js $EVENTS_PATH/events.js
+else
+    echo "Events file exists: skipping copying of example file"
+fi
+
+echo "
+Run 'crontab -e' in a shell, then copy and save the following to the cron file:
+
+@reboot   ${CRON_TASK}
+0 0 * * * ${CRON_TASK}
+"

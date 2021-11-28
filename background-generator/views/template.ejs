@@ -1,0 +1,81 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        color: #fff;
+        font-family: sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+          url("/nature.jpg") center;
+      }
+      h1 {
+        font-size: 46px;
+        font-weight: lighter;
+        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+      }
+      .big {
+        font-size: 80px;
+        font-weight: bold;
+      }
+      .meta,
+      .attribution {
+        position: absolute;
+        z-index: 100;
+        bottom: 20px;
+        color: #fff;
+        font-size: 12px;
+      }
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+      .meta {
+        left: 20px;
+      }
+      .attribution {
+        right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="max-width: 1200px; z-index: 100">
+      <% events.forEach(function({ daysRemaining, description }){ %>
+        <h1>
+          <span class="big">
+            <%= daysRemaining.toLocaleString("en-US") %> <%= daysRemaining === 1 ? "day" : "days" %>
+          </span>
+          until <%= description %> 
+        </h1>
+      <% }); %>
+
+    <aside class="meta">
+      Image generated on <%= (new Date()).toString() %>
+    </aside>
+
+    <aside class="attribution">
+      Photo by
+      <a
+        href="https://unsplash.com/@ideasboom?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Qingbao Meng</a
+      >
+      on
+      <a
+        href="https://unsplash.com/s/photos/nature?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Unsplash</a
+      >
+    </aside>
+  </body>
+</html>

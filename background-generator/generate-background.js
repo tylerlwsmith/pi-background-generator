@@ -3,7 +3,6 @@ const path = require("path");
 const luxon = require("luxon");
 const express = require("express");
 const puppeteer = require("puppeteer-core");
-const child_process = require("child_process");
 
 (async function generateBackground() {
   /** Set the script to crash on unhandled promise rejections. */
